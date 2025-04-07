@@ -1,17 +1,16 @@
-
 :root {
   --background-default: #ffffff;
-  --background-higher: #f7f7f7;
-  --foreground-default: #11181c;
-  --foreground-dimmer: #687076;
-  --accent-primary-default: #6E56CF;
-  --border-default: #e5e5e5;
-  --status-success: #17c964;
+  --background-higher: #f8f9fa;
+  --foreground-default: #212529;
+  --foreground-dimmer: #6c757d;
+  --accent-primary-default: #0d6efd;
+  --border-default: #dee2e6;
+  --status-success: #198754;
 }
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 .app-container {
@@ -41,24 +40,23 @@ body {
   text-decoration: none;
   font-size: 14px;
   gap: 12px;
+  transition: all 0.2s;
+}
+
+.sidebar-link:hover {
+  background: var(--background-higher);
+  color: var(--foreground-default);
 }
 
 .sidebar-link.active {
   background: var(--background-higher);
-  color: var(--foreground-default);
+  color: var(--accent-primary-default);
 }
 
 .main-content {
   flex: 1;
   padding: 24px;
   background: var(--background-higher);
-}
-
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
 }
 
 .language-tabs {
@@ -78,69 +76,15 @@ body {
 }
 
 .language-tab.active {
-  background: var(--background-default);
-  color: var(--foreground-default);
-}
-
-.content-card {
-  background: var(--background-default);
-  border-radius: 8px;
-  padding: 24px;
-}
-
-.services-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.services-table th {
-  text-align: left;
-  padding: 12px;
-  font-size: 12px;
-  color: var(--foreground-dimmer);
-  font-weight: 500;
-  border-bottom: 1px solid var(--border-default);
-}
-
-.services-table td {
-  padding: 12px;
-  font-size: 14px;
-  border-bottom: 1px solid var(--border-default);
-}
-
-.service-image {
-  width: 40px;
-  height: 40px;
-  border-radius: 4px;
-  object-fit: cover;
-}
-
-.add-button {
-  padding: 8px 16px;
   background: var(--accent-primary-default);
   color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
 }
 
-.status-badge {
-  width: 8px;
-  height: 8px;
-  background: var(--status-success);
-  border-radius: 50%;
+.table {
+  margin-bottom: 0;
 }
 
-.action-button {
-  background: none;
-  border: none;
-  color: var(--accent-primary-default);
-  cursor: pointer;
-  padding: 4px 8px;
-  font-size: 14px;
-}
-
-.delete-button {
-  color: #f31260;
+.btn-primary {
+  background-color: var(--accent-primary-default);
+  border-color: var(--accent-primary-default);
 }

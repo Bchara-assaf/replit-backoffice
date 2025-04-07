@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-do
 import { ServicesPage } from './presentation/pages/ServicesPage';
 import { CategoriesPage } from './presentation/pages/CategoriesPage';
 import { TypesPage } from './presentation/pages/TypesPage';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 export default function App() {
