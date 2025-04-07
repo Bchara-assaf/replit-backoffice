@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Service } from '../../domain/entities/Service';
 import { ServiceService } from '../../application/services/ServiceService';
@@ -6,6 +5,25 @@ import { MockServiceRepository } from '../../infrastructure/repositories/MockSer
 import { Modal, Button, Form } from 'react-bootstrap';
 
 const serviceService = new ServiceService(new MockServiceRepository());
+
+//New Component for Page Header
+const PageHeader = ({title, breadcrumbItem, onAddClick, addButtonText}: {title: string, breadcrumbItem: string, onAddClick: () => void, addButtonText: string}) => (
+  <div className="d-flex justify-content-between align-items-center mb-4 page-header">
+    <div>
+      <h4 className="mb-0">{title}</h4>
+      <nav aria-label="breadcrumb">
+        <ol className="breadcrumb mb-0">
+          <li className="breadcrumb-item"><a href="#">Dashboard</a></li>
+          <li className="breadcrumb-item active">{breadcrumbItem}</li>
+        </ol>
+      </nav>
+    </div>
+    <button className="btn btn-primary" onClick={onAddClick}>
+      <i className="bi bi-plus-lg me-2"></i>{addButtonText}
+    </button>
+  </div>
+);
+
 
 export function ServicesPage() {
   const [services, setServices] = useState<Service[]>([]);
@@ -30,23 +48,23 @@ export function ServicesPage() {
 
   useEffect(() => {
     let result = [...services];
-    
+
     if (filters.category) {
       result = result.filter(service => service.categoryId === Number(filters.category));
     }
-    
+
     if (filters.type) {
       result = result.filter(service => service.typeId === Number(filters.type));
     }
-    
+
     if (filters.priceMin) {
       result = result.filter(service => service.price >= Number(filters.priceMin));
     }
-    
+
     if (filters.priceMax) {
       result = result.filter(service => service.price <= Number(filters.priceMax));
     }
-    
+
     if (filters.search) {
       const searchLower = filters.search.toLowerCase();
       result = result.filter(service => 
@@ -54,7 +72,7 @@ export function ServicesPage() {
         service.description.toLowerCase().includes(searchLower)
       );
     }
-    
+
     setFilteredServices(result);
   }, [services, filters]);
 
@@ -126,20 +144,12 @@ export function ServicesPage() {
   return (
     <div className="flex-grow-1 bg-light">
       <div className="container-fluid py-4">
-        <div className="d-flex justify-content-between align-items-center mb-4 page-header">
-          <div>
-            <h4 className="mb-0">Services</h4>
-            <nav aria-label="breadcrumb">
-              <ol className="breadcrumb mb-0">
-                <li className="breadcrumb-item"><a href="#">Dashboard</a></li>
-                <li className="breadcrumb-item active">Services</li>
-              </ol>
-            </nav>
-          </div>
-          <button className="btn btn-primary" onClick={() => handleShowModal()}>
-            <i className="bi bi-plus-lg me-2"></i>Add Service
-          </button>
-        </div>
+        <PageHeader 
+          title="Services"
+          breadcrumbItem="Services"
+          onAddClick={() => handleShowModal()}
+          addButtonText="Add Service"
+        />
 
         <div className="card shadow-sm mb-4 p-3">
           <div className="row g-3 filter-row">
