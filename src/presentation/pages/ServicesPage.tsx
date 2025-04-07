@@ -9,9 +9,17 @@ const serviceService = new ServiceService(new MockServiceRepository());
 
 export function ServicesPage() {
   const [services, setServices] = useState<Service[]>([]);
+  const [filteredServices, setFilteredServices] = useState<Service[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [types, setTypes] = useState<any[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [filters, setFilters] = useState({
+    category: '',
+    type: '',
+    priceMin: '',
+    priceMax: '',
+    search: ''
+  });
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [formData, setFormData] = useState<Partial<Service>>({});
@@ -19,6 +27,36 @@ export function ServicesPage() {
   useEffect(() => {
     loadData();
   }, []);
+
+  useEffect(() => {
+    let result = [...services];
+    
+    if (filters.category) {
+      result = result.filter(service => service.categoryId === Number(filters.category));
+    }
+    
+    if (filters.type) {
+      result = result.filter(service => service.typeId === Number(filters.type));
+    }
+    
+    if (filters.priceMin) {
+      result = result.filter(service => service.price >= Number(filters.priceMin));
+    }
+    
+    if (filters.priceMax) {
+      result = result.filter(service => service.price <= Number(filters.priceMax));
+    }
+    
+    if (filters.search) {
+      const searchLower = filters.search.toLowerCase();
+      result = result.filter(service => 
+        service.name.toLowerCase().includes(searchLower) ||
+        service.description.toLowerCase().includes(searchLower)
+      );
+    }
+    
+    setFilteredServices(result);
+  }, [services, filters]);
 
   const loadData = async () => {
     const [servicesData, categoriesData, typesData] = await Promise.all([
@@ -103,6 +141,76 @@ export function ServicesPage() {
           </button>
         </div>
 
+        <div className="card shadow-sm mb-4 p-3">
+          <div className="row g-3">
+            <div className="col-md-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search services..."
+                value={filters.search}
+                onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+              />
+            </div>
+            <div className="col-md-2">
+              <select
+                className="form-select"
+                value={filters.category}
+                onChange={(e) => setFilters(prev => ({ ...prev, category: e.target.value }))}
+              >
+                <option value="">All Categories</option>
+                {categories.map(category => (
+                  <option key={category.id} value={category.id}>{category.name}</option>
+                ))}
+              </select>
+            </div>
+            <div className="col-md-2">
+              <select
+                className="form-select"
+                value={filters.type}
+                onChange={(e) => setFilters(prev => ({ ...prev, type: e.target.value }))}
+              >
+                <option value="">All Types</option>
+                {types.map(type => (
+                  <option key={type.id} value={type.id}>{type.name}</option>
+                ))}
+              </select>
+            </div>
+            <div className="col-md-2">
+              <input
+                type="number"
+                className="form-control"
+                placeholder="Min Price"
+                value={filters.priceMin}
+                onChange={(e) => setFilters(prev => ({ ...prev, priceMin: e.target.value }))}
+              />
+            </div>
+            <div className="col-md-2">
+              <input
+                type="number"
+                className="form-control"
+                placeholder="Max Price"
+                value={filters.priceMax}
+                onChange={(e) => setFilters(prev => ({ ...prev, priceMax: e.target.value }))}
+              />
+            </div>
+            <div className="col-md-1">
+              <button 
+                className="btn btn-outline-secondary w-100"
+                onClick={() => setFilters({
+                  category: '',
+                  type: '',
+                  priceMin: '',
+                  priceMax: '',
+                  search: ''
+                })}
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div className="card shadow-sm">
           <div className="table-responsive">
             <table className="table table-hover align-middle mb-0">
@@ -116,7 +224,7 @@ export function ServicesPage() {
                 </tr>
               </thead>
               <tbody>
-                {services.map(service => (
+                {filteredServices.map(service => (
                   <tr key={service.id}>
                     <td>
                       <div className="d-flex align-items-center">
