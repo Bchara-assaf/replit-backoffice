@@ -126,7 +126,7 @@ export function ServicesPage() {
   return (
     <div className="flex-grow-1 bg-light">
       <div className="container-fluid py-4">
-        <div className="d-flex justify-content-between align-items-center mb-4">
+        <div className="d-flex justify-content-between align-items-center mb-4 page-header">
           <div>
             <h4 className="mb-0">Services</h4>
             <nav aria-label="breadcrumb">
@@ -142,7 +142,7 @@ export function ServicesPage() {
         </div>
 
         <div className="card shadow-sm mb-4 p-3">
-          <div className="row g-3">
+          <div className="row g-3 filter-row">
             <div className="col-md-3">
               <input
                 type="text"
@@ -212,7 +212,7 @@ export function ServicesPage() {
         </div>
 
         <div className="card shadow-sm">
-          <div className="table-responsive">
+          <div className="table-wrapper">
             <table className="table table-hover align-middle mb-0">
               <thead className="bg-light">
                 <tr>
