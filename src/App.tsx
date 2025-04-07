@@ -1,5 +1,5 @@
 
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { ServicesPage } from './presentation/pages/ServicesPage';
 import { CategoriesPage } from './presentation/pages/CategoriesPage';
 import { TypesPage } from './presentation/pages/TypesPage';
@@ -10,9 +10,9 @@ export default function App() {
     <BrowserRouter>
       <div className="container">
         <nav>
-          <Link to="/">Services</Link>
-          <Link to="/categories">Categories</Link>
-          <Link to="/types">Types</Link>
+          <Link to="/" className={location.pathname === '/' ? 'active' : ''}>Services</Link>
+          <Link to="/categories" className={location.pathname === '/categories' ? 'active' : ''}>Categories</Link>
+          <Link to="/types" className={location.pathname === '/types' ? 'active' : ''}>Types</Link>
         </nav>
         
         <Routes>
