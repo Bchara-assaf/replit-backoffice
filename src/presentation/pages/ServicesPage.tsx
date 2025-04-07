@@ -1,72 +1,89 @@
 
 import { useState, useEffect } from 'react';
-import { Service } from '../../domain/entities/Service';
 import { ServiceService } from '../../application/services/ServiceService';
 import { MockServiceRepository } from '../../infrastructure/repositories/MockServiceRepository';
 
 const serviceService = new ServiceService(new MockServiceRepository());
 
 export function ServicesPage() {
-  const [services, setServices] = useState<Service[]>([]);
-  const [categories, setCategories] = useState<any[]>([]);
-  const [types, setTypes] = useState<any[]>([]);
+  const [services, setServices] = useState<any[]>([]);
+  const [activeLanguage, setActiveLanguage] = useState('English');
 
   useEffect(() => {
-    loadData();
+    loadServices();
   }, []);
 
-  const loadData = async () => {
-    const [servicesData, categoriesData, typesData] = await Promise.all([
-      serviceService.getAllServices(),
-      serviceService.getAllCategories(),
-      serviceService.getAllTypes(),
-    ]);
-    setServices(servicesData);
-    setCategories(categoriesData);
-    setTypes(typesData);
-  };
-
-  const getCategory = (categoryId: number) => {
-    return categories.find(cat => cat.id === categoryId)?.name || 'Unknown';
-  };
-
-  const getType = (typeId: number) => {
-    return types.find(type => type.id === typeId)?.name || 'Unknown';
-  };
-
-  const deleteService = async (id: number) => {
-    await serviceService.deleteService(id);
-    setServices(services.filter(service => service.id !== id));
+  const loadServices = async () => {
+    const data = await serviceService.getAllServices();
+    setServices(data);
   };
 
   return (
-    <div className="page">
-      <h1>Services</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Type</th>
-            <th>Price</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {services.map(service => (
-            <tr key={service.id}>
-              <td>{service.name}</td>
-              <td>{getCategory(service.categoryId)}</td>
-              <td>{getType(service.typeId)}</td>
-              <td>${service.price}</td>
-              <td>
-                <button>Edit</button>
-                <button onClick={() => deleteService(service.id)}>Delete</button>
-              </td>
+    <div className="main-content">
+      <div className="page-header">
+        <h1>Services</h1>
+        <button className="add-button">Add Service</button>
+      </div>
+
+      <div className="language-tabs">
+        <button 
+          className={`language-tab ${activeLanguage === 'English' ? 'active' : ''}`}
+          onClick={() => setActiveLanguage('English')}
+        >
+          English
+        </button>
+        <button 
+          className={`language-tab ${activeLanguage === 'Français' ? 'active' : ''}`}
+          onClick={() => setActiveLanguage('Français')}
+        >
+          Français
+        </button>
+        <button 
+          className={`language-tab ${activeLanguage === 'العربية' ? 'active' : ''}`}
+          onClick={() => setActiveLanguage('العربية')}
+        >
+          العربية
+        </button>
+      </div>
+
+      <div className="content-card">
+        <table className="services-table">
+          <thead>
+            <tr>
+              <th>NAME</th>
+              <th>CATEGORY</th>
+              <th>TYPE</th>
+              <th>PRICE</th>
+              <th>STATUS</th>
+              <th>ACTIONS</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {services.map(service => (
+              <tr key={service.id}>
+                <td>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <img src={service.image} alt={service.name} className="service-image" />
+                    <div>
+                      <div>{service.name}</div>
+                      <div style={{ fontSize: '12px', color: 'var(--foreground-dimmer)' }}>{service.description}</div>
+                    </div>
+                  </div>
+                </td>
+                <td>{service.category}</td>
+                <td>{service.type}</td>
+                <td>${service.price}</td>
+                <td><div className="status-badge"></div></td>
+                <td>
+                  <button className="action-button">Edit</button>
+                  <button className="action-button">View Images</button>
+                  <button className="action-button delete-button">Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
